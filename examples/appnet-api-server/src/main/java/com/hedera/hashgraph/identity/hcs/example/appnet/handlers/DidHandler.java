@@ -48,6 +48,11 @@ public class DidHandler extends AppnetHandler {
     ctx.getRequest().getBody().then(data -> buildDidMessage(ctx, data.getText(), DidMethodOperation.CREATE));
   }
 
+  public void options(final Context ctx) {
+    System.out.printf("Getting options");
+    ctx.getResponse().status(200);
+  }
+
   /**
    * Constructs a new DID topic message for DID UPDATE operation.
    * The DID document is provided in the request body.

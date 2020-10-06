@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ratpack.http.MutableHeaders;
 import ratpack.server.RatpackServer;
 
 /**
@@ -195,11 +196,13 @@ public class AppnetServer {
                 + "Please refer to documentation for more details about available APIs."))
 
             // REST API endpoints for DID
-            .path("did", ctx -> ctx.byMethod(m -> m
+            .path("did", ctx -> {
+              ctx.byMethod(m -> m
                 .post(() -> didHandler.create(ctx))
                 .put(() -> didHandler.update(ctx))
                 .delete(() -> didHandler.delete(ctx))
-                .get(() -> didHandler.resolve(ctx))))
+                .get(() -> didHandler.resolve(ctx)));
+            })
             .post("did-submit", ctx -> didHandler.submit(ctx, client, mirrorClient))
 
             // REST API endpoints for VC
@@ -275,6 +278,11 @@ public class AppnetServer {
     // Grab the network to use from environment variables
     final String network = Objects.requireNonNull(dotenv.get("NETWORK"));
 
+
+    System.out.println("operator id: " + operatorId);
+    System.out.println("operator key: " + operatorKey);
+    System.out.println("network: " + network);
+
     // Build Hedera testnet client
     client = Client.fromFile(network.concat(".json"));
 
@@ -299,6 +307,7 @@ public class AppnetServer {
           System.exit(1);
       }
     }
+    System.out.println(mirrorNodeAddress);
 
     // Build the mirror node client
     mirrorClient = new MirrorClient(mirrorNodeAddress);
