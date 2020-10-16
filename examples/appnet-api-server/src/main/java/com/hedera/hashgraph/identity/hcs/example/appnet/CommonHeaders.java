@@ -1,5 +1,6 @@
 package com.hedera.hashgraph.identity.hcs.example.appnet;
 
+import com.hedera.hashgraph.identity.hcs.example.appnet.handlers.DemoHandler;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.http.MutableHeaders;
@@ -15,7 +16,7 @@ public class CommonHeaders implements Handler {
     ctx.getResponse().contentType("application/json");
     MutableHeaders headers = ctx.getResponse().getHeaders();
     headers.set("Access-Control-Allow-Origin", "*");
-    headers.set("Access-Control-Allow-Headers", "*");
+    headers.set("Access-Control-Allow-Headers", DemoHandler.HEADER_PRIVATE_KEY);
     headers.set("Access-Control-Allow-Methods", "*");
     ctx.next();
   }

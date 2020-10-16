@@ -196,13 +196,13 @@ public class AppnetServer {
                 + "Please refer to documentation for more details about available APIs."))
 
             // REST API endpoints for DID
-            .path("did", ctx -> {
+            .path("did", ctx ->
               ctx.byMethod(m -> m
                 .post(() -> didHandler.create(ctx))
                 .put(() -> didHandler.update(ctx))
-                .delete(() -> didHandler.delete(ctx))
-                .get(() -> didHandler.resolve(ctx)));
-            })
+                .delete(() -> didHandler.delete(ctx)))
+            )
+            .post("did-resolve", ctx -> didHandler.resolve(ctx))
             .post("did-submit", ctx -> didHandler.submit(ctx, client, mirrorClient))
 
             // REST API endpoints for VC
@@ -268,7 +268,7 @@ public class AppnetServer {
    */
   private void initHederaIdentityNetwork() throws HederaNetworkException, HederaStatusException, FileNotFoundException {
     log.info("Initializing identity network...");
-    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().ignoreIfMalformed().load();
+    Dotenv dotenv = Dotenv.configure().load();
 
     // Grab the OPERATOR_ID and OPERATOR_KEY from environment variable
     final AccountId operatorId = AccountId.fromString(Objects.requireNonNull(dotenv.get("OPERATOR_ID")));
